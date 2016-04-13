@@ -1,0 +1,312 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/CoundownHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Countdown Time:"
+        android:textColor="@color/DarkGrey"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <EditText android:id="@+id/countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@+id/CoundownHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"
+        />
+
+    <TextView
+        android:id="@+id/TemperatureHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Temperatures for Audible Alarm"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/countdown"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <TextView
+        android:id="@+id/UpTempHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Max Temperature:"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/TemperatureHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <EditText android:id="@+id/UpTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/UpTempHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/LoTempHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Min Temperature:"
+        android:textColor="@color/DarkGrey"
+        android:layout_above="@+id/UpTemp"
+        android:layout_toEndOf="@+id/UpTemp" />
+
+    <EditText android:id="@+id/LoTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_alignTop="@+id/UpTemp"
+        android:layout_toEndOf="@+id/UpTemp"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/TripValHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Lighting limit:"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/LoTemp"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+    <EditText android:id="@+id/TripVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/TripValHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/CurrentValHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Current 'Lux':"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/LoTemp"
+        android:layout_toEndOf="@+id/TripVal"
+        />
+
+    <EditText android:id="@+id/CurrentVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/TripValHeading"
+        android:hint = "0"
+        android:layout_above="@+id/TimedOutput"
+        android:layout_toEndOf="@+id/TripVal"/>
+
+
+
+    <TextView
+        android:id="@+id/TimedOutput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Timed Output"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/TripVal"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <TextView
+        android:id="@+id/HourONHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Hour to turn on:"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/TimedOutput"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <EditText android:id="@+id/HourON"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/HourONHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/MinuteONHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Minute to turn on:"
+        android:textColor="@color/DarkGrey"
+        android:layout_above="@+id/MinuteON"
+        android:layout_toEndOf="@+id/HourON" />
+
+    <EditText android:id="@+id/MinuteON"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/HourONHeading"
+        android:layout_toRightOf="@id/HourON"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/HourOFFHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Hour to turn off:"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/HourON"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <EditText android:id="@+id/HourOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/HourOFFHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/MinuteOFFHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Minute to turn off:"
+        android:textColor="@color/DarkGrey"
+        android:layout_above="@+id/MinuteOFF"
+        android:layout_toEndOf="@+id/HourOFF" />
+
+    <EditText android:id="@+id/MinuteOFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/HourOFFHeading"
+        android:layout_toRightOf="@id/HourOFF"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/WakeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Time to wake the system up"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/MinuteOFF"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <TextView
+        android:id="@+id/WakeHourHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Hour to wake up:"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@id/WakeTime"
+        android:layout_toEndOf="@+id/CountUpdate"
+        />
+
+    <EditText android:id="@+id/WHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/WakeHourHeading"
+        android:layout_toEndOf="@+id/CountUpdate"
+        android:hint = "0"/>
+
+    <TextView
+        android:id="@+id/WakeMinuteHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Minute to wake up:"
+        android:textColor="@color/DarkGrey"
+        android:layout_above="@+id/WMinute"
+        android:layout_toEndOf="@+id/WHour" />
+
+    <EditText android:id="@+id/WMinute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="300px"
+        android:layout_below="@id/WakeHourHeading"
+        android:layout_toRightOf="@id/WHour"
+        android:hint = "0"/>
+
+    <Button android:id="@+id/RUpdate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Request Update" />
+
+    <ImageButton android:id = "@+id/CountUpdate"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/updatebutton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignBottom="@+id/countdown"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        />
+
+    <ImageButton android:id = "@+id/TempLimitsUpdate"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/updatebutton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignBottom="@+id/UpTemp"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        />
+
+    <ImageButton android:id = "@+id/LightingLimitUpdate"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/updatebutton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignBottom="@+id/TripVal"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        />
+
+    <ImageButton android:id = "@+id/TimeOutputUpdate"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/updatebutton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignBottom="@+id/HourOFFHeading"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        />
+
+    <ImageButton android:id = "@+id/WakeTimeUpdate"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/updatebutton"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignBottom="@+id/WHour"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        />
+
+</RelativeLayout>

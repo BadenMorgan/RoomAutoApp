@@ -1,0 +1,179 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="90sp"
+        android:text="88:88:88"
+        android:textColor="@color/DarkGrey"
+        android:editable = "true"
+
+        />
+    <TextView
+        android:id="@+id/Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="88/88/8888"
+        android:textColor="@color/DarkGrey"
+        android:layout_below="@+id/Time"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:id="@+id/Temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/Date"
+        android:textSize="30sp"
+        android:text="88.88&#xb0;C"
+        android:textColor="@color/DarkGrey"
+        />
+
+
+
+    <ImageButton android:id = "@+id/wakemode"
+        android:layout_width="90dip"
+        android:layout_height="90dip"
+        android:src="@drawable/sundefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_below="@+id/Temp"
+        android:layout_alignStart="@+id/Time" />
+
+    <ImageButton android:id = "@+id/buzzer"
+        android:layout_width="90dip"
+        android:layout_height="90dip"
+        android:src="@drawable/buzzerdefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_below="@+id/Temp"
+        android:layout_toEndOf="@+id/wakemode" />
+
+    <ImageButton android:id = "@+id/tempControl"
+        android:layout_width="90dip"
+        android:layout_height="90dip"
+        android:src="@drawable/temperaturedefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_below="@+id/Temp"
+        android:layout_toStartOf="@+id/TimerControl" />
+
+    <ImageButton android:id = "@+id/TimerControl"
+        android:layout_width="90dip"
+        android:layout_height="90dip"
+        android:src="@drawable/timerdefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_below="@+id/Temp"
+        android:layout_alignEnd="@+id/Time" />
+
+    <ImageView android:id = "@+id/window1"
+        android:layout_width = "75dip"
+        android:layout_height = "75dip"
+        android:src ="@drawable/windowdefault"
+        android:layout_alignTop="@+id/door"
+        android:layout_toStartOf="@+id/Temp" />
+
+    <ImageView android:id = "@+id/door"
+        android:layout_width = "75dip"
+        android:layout_height = "75dip"
+        android:src ="@drawable/doordefault"
+        android:layout_below="@+id/buzzer"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView android:id = "@+id/window2"
+        android:layout_width = "75dip"
+        android:layout_height = "75dip"
+        android:src ="@drawable/windowdefault"
+        android:layout_alignTop="@+id/door"
+        android:layout_toEndOf="@+id/Temp" />
+
+    <ImageButton android:id = "@+id/LED1"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/door" />
+
+    <ImageButton android:id = "@+id/LED2"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="8dp"
+        android:layout_alignTop="@+id/LED1"
+        android:layout_toEndOf="@+id/LED1" />
+
+    <ImageButton android:id = "@+id/LED3"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="8dp"
+        android:layout_alignTop="@+id/LED1"
+        android:layout_toEndOf="@+id/LED2" />
+
+    <ImageButton android:id = "@+id/LED4"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="8dp"
+        android:layout_alignTop="@+id/LED1"
+        android:layout_toEndOf="@+id/LED3" />
+
+    <ImageButton android:id = "@+id/LED5"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="8dp"
+        android:layout_alignTop="@+id/LED1"
+        android:layout_toEndOf="@+id/LED4" />
+
+    <ImageButton android:id = "@+id/LED6"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/leddefault"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground"
+        android:layout_marginLeft="8dp"
+        android:layout_alignTop="@+id/LED1"
+        android:layout_toEndOf="@+id/LED5" />
+
+    <TextView
+        android:id="@+id/LastMove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="Last Movement: 88:88:88 on 13/12"
+        android:textColor="@color/DarkGrey"
+        android:editable = "true"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/LED1"
+        />
+
+</RelativeLayout>
