@@ -50,20 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
     public void onDestroy(){
         super.onDestroy();
         stopService(new Intent(this, MQTTService.class));
-    }
-
-    public void onPause(){
-        super.onPause();
-        stopService(new Intent(this, MQTTService.class));
-    }
-
-    public void onResume(){
-        super.onResume();
-        stopService(new Intent(this, MQTTService.class));
-        startService(new Intent(this, MQTTService.class));
     }
 
     public static void ChangeBackground(byte flag){

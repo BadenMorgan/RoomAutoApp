@@ -2,16 +2,12 @@ package com.example.baden.HomeAuto;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
-import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 
 public class TabFragment2 extends Fragment {
     public static View view;
@@ -21,7 +17,7 @@ public class TabFragment2 extends Fragment {
     public static ImageButton TempLimits;
     public static ImageButton Count;
     public static Button RequestUpdate;
-    public static EditText countdown,UpTemp,LoTemp,TripVal,HourON,MinuteON,HourOFF,MinuteOFF,WHour,WMinute;
+    public static EditText countdown,UpTemp,LoTemp,TripVal,CurrentVal,HourON,MinuteON,HourOFF,MinuteOFF,WHour,WMinute;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +41,17 @@ public class TabFragment2 extends Fragment {
         RequestUpdate = (Button)view.findViewById(R.id.RUpdate);
         RequestUpdate.setOnClickListener(RequestUpdateNow);
 
-
+        countdown = (EditText)view.findViewById(R.id.countdown);
+        UpTemp = (EditText)view.findViewById(R.id.UpTemp);
+        LoTemp = (EditText)view.findViewById(R.id.LoTemp);
+        TripVal = (EditText)view.findViewById(R.id.TripVal);
+        CurrentVal = (EditText)view.findViewById(R.id.CurrentVal);
+        HourON = (EditText)view.findViewById(R.id.HourON);
+        MinuteON = (EditText)view.findViewById(R.id.MinuteON);
+        HourOFF = (EditText)view.findViewById(R.id.HourOFF);
+        MinuteOFF = (EditText)view.findViewById(R.id.MinuteOFF);
+        WHour = (EditText)view.findViewById(R.id.WHour);
+        WMinute = (EditText)view.findViewById(R.id.WMinute);
 
         return view;
     }
@@ -53,7 +59,7 @@ public class TabFragment2 extends Fragment {
     public View.OnClickListener WakeTimeUpdateListener = new View.OnClickListener(){
         public void onClick(View v) {
             byte SendBuf[] = {2};
-            MQTTService.PublishMsg("c/0",SendBuf);
+            MQTTService.PublishMsg("c/0", SendBuf);
         }
     };
 
@@ -79,8 +85,8 @@ public class TabFragment2 extends Fragment {
 
     public View.OnClickListener RequestUpdateNow = new View.OnClickListener(){
         public void onClick(View v) {
-            byte SendBuf[] ={1};
-            MQTTService.PublishMsg("c/0",SendBuf);
+            byte SendBuf[] ={2};
+            MQTTService.PublishMsg("c/0", SendBuf);
         }
     };
 
@@ -106,6 +112,9 @@ public class TabFragment2 extends Fragment {
         WMinute = (EditText)view.findViewById(R.id.WMinute);
         WMinute.setHint(Integer.toString(unsignedToBytes(values[10])));
     };
+    public static void UpdateLghtVal(int lightval){
+        CurrentVal.setHint(Integer.toString(lightval));
+    }
 
     public static int unsignedToBytes(byte b) {
         return b & 0xFF;

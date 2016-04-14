@@ -1,5 +1,4 @@
 package com.example.baden.HomeAuto;
-import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
@@ -23,7 +22,6 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -38,6 +36,7 @@ public class MQTTService extends Service {
     private ConnectivityManager mConnMan;
     public  static MqttClient mqttClient;
     private String deviceId;
+    public static MQTTBroadcastReceiver mqttBroadcastReceiver;
 
     class MQTTBroadcastReceiver extends BroadcastReceiver {
         @Override
@@ -89,7 +88,8 @@ public class MQTTService extends Service {
         IntentFilter intentf = new IntentFilter();
         setClientID();
         intentf.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(new MQTTBroadcastReceiver(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        mqttBroadcastReceiver = new MQTTBroadcastReceiver();
+        registerReceiver(mqttBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         mConnMan = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
     }
 
@@ -114,7 +114,7 @@ public class MQTTService extends Service {
         MqttConnectOptions options = new MqttConnectOptions();
         MqttMessage message1 = new MqttMessage(message);
         try {
-            mqttClient.publish(topic,message1);;
+            mqttClient.publish(topic, message1);;
         } catch (MqttSecurityException e) {
             e.printStackTrace();
         } catch (MqttException e) {
@@ -137,6 +137,15 @@ public class MQTTService extends Service {
         }
     }
 
+    public static void doDisconnect(){
+        Log.d(TAG, "doDisconnect()");
+        try {
+            mqttClient.disconnect();
+        }catch(Exception e){
+            Log.d(TAG, "error:",e);
+        }
+    }
+
     private void doConnect(){
         Log.d(TAG, "doConnect()");
         MqttConnectOptions options = new MqttConnectOptions();
@@ -144,13 +153,14 @@ public class MQTTService extends Service {
         char pass[] = {101, 101, 83, 112, 55, 52, 100, 88, 89, 82, 112, 83};
         options.setPassword(pass);
         options.setUserName("zhodqirz");
+        options.setKeepAliveInterval(20);
         try {
             mqttClient = new MqttClient("tcp://m21.cloudmqtt.com:11502", "android1", new MemoryPersistence());
             mqttClient.connect(options);
             Toast.makeText(getApplicationContext(), "Connected to broker!", Toast.LENGTH_LONG).show();
             mqttClient.setCallback(new MqttEventCallback());
             mqttClient.subscribe("d/0", 0);
-            byte SendBuf[] ={1};
+            byte SendBuf[] ={2};
             MQTTService.PublishMsg("c/0", SendBuf);
         } catch (MqttSecurityException e) {
             e.printStackTrace();
@@ -177,8 +187,16 @@ public class MQTTService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.v(TAG, "onStartCommand()");
+        Log.v(TAG, " onStartCommand()");
+        doConnect();
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        MQTTService.doDisconnect();
+        unregisterReceiver(mqttBroadcastReceiver);
     }
 
     private class MqttEventCallback implements MqttCallback {
@@ -214,120 +232,22 @@ public class MQTTService extends Service {
                     //time
                     byte received[] = msg.getPayload();
 
-                    if ((received.length == 17) && (received[0] == 1)) {
-                        byte temp1 = DynamicVariables.hours;
-                        byte temp2 = DynamicVariables.minutes;
-                        byte temp3 = DynamicVariables.seconds;
-                        DynamicVariables.hours = received[1];
-                        DynamicVariables.minutes = received[2];
-                        DynamicVariables.seconds = received[3];
-                        if (temp1 != DynamicVariables.hours || temp2 != DynamicVariables.minutes || temp3 != DynamicVariables.seconds) {
-                            TabFragment1.updateTime();
-                        }
+                    if ((received.length == 19) && (received[0] == 1)) {
+                        TabFragment1.updateTime(received[1], received[2], received[3]);
                         //date
-                        temp1 = DynamicVariables.day;
-                        temp2 = DynamicVariables.month;
-                        temp3 = DynamicVariables.year;
-                        DynamicVariables.day = received[4];
-                        DynamicVariables.month = received[5];
-                        DynamicVariables.year = received[6];
-                        if (temp1 != DynamicVariables.day || temp2 != DynamicVariables.month || temp3 != DynamicVariables.year) {
-                            TabFragment1.updateDate();
-                        }
+                        TabFragment1.updateDate(received[4], received[5], received[6]);
                         //temperature
-                        temp1 = DynamicVariables.temperature1;
-                        temp2 = DynamicVariables.temperature2;
-                        DynamicVariables.temperature1 = received[7];
-                        DynamicVariables.temperature2 = received[8];
-                        if (temp1 != DynamicVariables.temperature1 || temp2 != DynamicVariables.temperature2) {
-                            TabFragment1.updateTemp();
-                        }
+                        TabFragment1.updateTemp(received[7], received[8]);
                         //settings & indicators
-                        temp1 = DynamicVariables.WAKEMODE;
-                        temp2 = DynamicVariables.BUZZERMODE;
-                        temp3 = DynamicVariables.TEMPERATURECONTROL;
-                        byte temp8 = DynamicVariables.TIMERCONTROL;
-                        byte temp4 = DynamicVariables.WINDOW1;
-                        byte temp5 = DynamicVariables.WINDOW2;
-                        byte temp6 = DynamicVariables.DOOR;
-                        byte temp7 = received[9];
-
-                        //indicators
-                        //window1
-                        if ((temp7 & 1) == 1) {
-                            DynamicVariables.WINDOW1 = 1;
-                        } else {
-                            DynamicVariables.WINDOW1 = 0;
-                        }
-                        if (temp4 != DynamicVariables.WINDOW1) {
-                            TabFragment1.updateIndicators((byte) 1);
-                        }
-                        //window2
-                        if ((temp7 & 2) == 2) {
-                            DynamicVariables.WINDOW2 = 1;
-                        } else {
-                            DynamicVariables.WINDOW2 = 0;
-                        }
-                        if (temp5 != DynamicVariables.WINDOW2) {
-                            TabFragment1.updateIndicators((byte) 2);
-                        }
-                        //door
-                        if ((temp7 & 4) == 4) {
-                            DynamicVariables.DOOR = 1;
-                        } else {
-                            DynamicVariables.DOOR = 0;
-                        }
-                        if (temp6 != DynamicVariables.DOOR) {
-                            TabFragment1.updateIndicators((byte) 3);
-                        }
-                        //settings
-                        //wakemode set
-                        if ((temp7 & 8) == 8) {
-                            DynamicVariables.WAKEMODE = 1;
-                        } else {
-                            DynamicVariables.WAKEMODE = 0;
-                        }
-                        if (temp1 != DynamicVariables.WAKEMODE) {
-                            TabFragment1.updateSettings((byte) 1);
-                        }
-                        //buzzer set
-                        if ((temp7 & 16) == 16) {
-                            DynamicVariables.BUZZERMODE = 1;
-                        } else {
-                            DynamicVariables.BUZZERMODE = 0;
-                        }
-                        if (temp2 != DynamicVariables.BUZZERMODE) {
-                            TabFragment1.updateSettings((byte) 2);
-                        }
-                        //temperature set
-                        if ((temp7 & 32) == 32) {
-                            DynamicVariables.TEMPERATURECONTROL = 1;
-                        } else {
-                            DynamicVariables.TEMPERATURECONTROL = 0;
-                        }
-                        if (temp3 != DynamicVariables.TEMPERATURECONTROL) {
-                            TabFragment1.updateSettings((byte) 3);
-                        }
-                        //timer set
-                        if ((temp7 & 64) == 64) {
-                            DynamicVariables.TIMERCONTROL = 1;
-                        } else {
-                            DynamicVariables.TIMERCONTROL = 0;
-                        }
-                        if (temp8 != DynamicVariables.TIMERCONTROL) {
-                            TabFragment1.updateSettings((byte) 4);
-                        }
-                        DynamicVariables.LED = received[10];
-                        TabFragment1.UpdateLEDs();
-                        DynamicVariables.lastsecond = received[11];
-                        DynamicVariables.lastminute = received[12];
-                        DynamicVariables.lasthour = received[13];
-                        DynamicVariables.lastday = received[14];
-                        DynamicVariables.lastmonth = received[15];
-                        TabFragment1.UpdateMovement();
+                        TabFragment1.updateSettingsandIndicators(received[9]);
+                        TabFragment1.UpdateLEDs(received[10]);
+                        //last movement
+                        TabFragment1.UpdateMovement(received[11],received[12],received[13],received[14],received[15]);
                         if (received[16] == 1) {
                             Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
                         }
+                        int lightval = received[17]<<8 | received[18];
+                        TabFragment2.UpdateLghtVal(lightval);
                     }
                     if ((received.length == 11) && (received[0] == 2)) {
                         TabFragment2.UpdatHints(received);
