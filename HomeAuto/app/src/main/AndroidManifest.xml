@@ -11,7 +11,7 @@
         android:label="Home Auto"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name="com.example.baden.HomeAuto.MQTTService"
+        <service android:name=".MQTTService"
             android:label="MQTT Service"
         />
         <activity
