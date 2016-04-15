@@ -232,21 +232,12 @@ public class MQTTService extends Service {
                     //time
                     byte received[] = msg.getPayload();
 
-                    if ((received.length == 19) && (received[0] == 1)) {
-                        TabFragment1.updateTime(received[1], received[2], received[3]);
-                        //date
-                        TabFragment1.updateDate(received[4], received[5], received[6]);
-                        //temperature
-                        TabFragment1.updateTemp(received[7], received[8]);
-                        //settings & indicators
-                        TabFragment1.updateSettingsandIndicators(received[9]);
-                        TabFragment1.UpdateLEDs(received[10]);
-                        //last movement
-                        TabFragment1.UpdateMovement(received[11],received[12],received[13],received[14],received[15]);
+                    if ((received.length == 20) && (received[0] == 1)) {
+                        TabFragment1.UpdateView(received);
                         if (received[16] == 1) {
                             Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
                         }
-                        int lightval = received[17]<<8 | received[18];
+                        int lightval = (received[17]<<8)&0xFF00 | (received[18])&0xFF;
                         TabFragment2.UpdateLghtVal(lightval);
                     }
                     if ((received.length == 11) && (received[0] == 2)) {

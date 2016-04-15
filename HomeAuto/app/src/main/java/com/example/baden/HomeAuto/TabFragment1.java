@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 public class TabFragment1 extends Fragment {
     private static final String TAG = "FRAGEMNT 1";
+
     public static View view;
+
     public static ImageButton Wakemode;
     public static ImageButton Buzzer;
     public static ImageButton Temperature;
@@ -33,37 +35,22 @@ public class TabFragment1 extends Fragment {
     public static ImageButton LED5;
     public static ImageButton LED6;
     public static TextView LastMove;
-    static int mCurCheckPosition = 0;
 
+    public static TextView Reconnects;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         view = inflater.inflate(R.layout.fragment_tab_fragment1, container, false);
         creatItems();
-        DynamicVariables.BUZZERMODE = 0;
-        DynamicVariables.DOOR = 0;
-        DynamicVariables.TEMPERATURECONTROL = 0;
-        DynamicVariables.TIMERCONTROL = 0;
-        DynamicVariables.WAKEMODE = 0;
-        DynamicVariables.WINDOW1 = 0;
-        DynamicVariables.WINDOW2 = 0;
 
-        Wakemode.setOnClickListener(WakeModeListener);
-        Buzzer.setOnClickListener(BuzzerListen);
-        Temperature.setOnClickListener(TemperatureListener);
+        zerovariables();
 
-        Timer.setOnClickListener(TimerListener);;
-        LED1.setOnClickListener(LED1Listener);
-        LED2.setOnClickListener(LED2Listener);
-        LED3.setOnClickListener(LED3Listener);
-        LED4.setOnClickListener(LED4Listener);
-        LED5.setOnClickListener(LED5Listener);
-        LED6.setOnClickListener(LED6Listener);
+        setupbutton();
 
         return view;
     }
 
-    public static void creatItems(){
+    void creatItems(){
         TEMPERATURE = (TextView) view.findViewById(R.id.Temp);
         DATE = (TextView) view.findViewById(R.id.Date);
         TIME = (TextView) view.findViewById(R.id.Time);
@@ -83,52 +70,35 @@ public class TabFragment1 extends Fragment {
         LED4 = (ImageButton)view.findViewById(R.id.LED4);
         LED5 = (ImageButton)view.findViewById(R.id.LED5);
         LED6 = (ImageButton)view.findViewById(R.id.LED6);
+
         LastMove = (TextView) view.findViewById(R.id.LastMove);
+
+        Reconnects = (TextView) view.findViewById(R.id.Reconnects);
     }
 
-    /*@Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        Log.d(TAG, "saving states");
-        savedInstanceState.putCharSequence("hour", TIME.getText());
-        savedInstanceState.putCharSequence("date", DATE.getText());
-        savedInstanceState.putCharSequence("temperature", TEMPERATURE.getText());
-        savedInstanceState.putByte("buzz", DynamicVariables.BUZZERMODE);
-        savedInstanceState.putByte("door", DynamicVariables.DOOR);
-        savedInstanceState.putByte("led", DynamicVariables.LED);
-        savedInstanceState.putByte("temperaturecontrol", DynamicVariables.TEMPERATURECONTROL);
-        savedInstanceState.putByte("timercontrol", DynamicVariables.TIMERCONTROL);
-        savedInstanceState.putByte("wakemode", DynamicVariables.WAKEMODE);
-        savedInstanceState.putByte("window1", DynamicVariables.WINDOW1);
-        savedInstanceState.putByte("window2", DynamicVariables.WINDOW2);
-        savedInstanceState.putCharSequence("lastmove", LastMove.getText());
-    }*/
+    void zerovariables(){
+        DynamicVariables.BUZZERMODE = 0;
+        DynamicVariables.DOOR = 0;
+        DynamicVariables.TEMPERATURECONTROL = 0;
+        DynamicVariables.TIMERCONTROL = 0;
+        DynamicVariables.WAKEMODE = 0;
+        DynamicVariables.WINDOW1 = 0;
+        DynamicVariables.WINDOW2 = 0;
+    }
 
-    /*@Override
-    public void onActivityCreated( Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "restoring old states");
-        creatItems();
-        try {
-            TIME.setText(savedInstanceState.getCharSequence("hour"));
-            DATE.setText(savedInstanceState.getCharSequence("date"));
-            TEMPERATURE.setText(savedInstanceState.getCharSequence("temperature"));
-            DynamicVariables.BUZZERMODE = savedInstanceState.getByte("buzz");
-            DynamicVariables.DOOR = savedInstanceState.getByte("door");
-            DynamicVariables.TEMPERATURECONTROL = savedInstanceState.getByte("temperaturecontrol");
-            DynamicVariables.TIMERCONTROL = savedInstanceState.getByte("timercontrol");
-            DynamicVariables.WAKEMODE = savedInstanceState.getByte("wakemode");
-            DynamicVariables.WINDOW1 = savedInstanceState.getByte("window1");
-            DynamicVariables.WINDOW2 = savedInstanceState.getByte("window2");
+    void setupbutton(){
+        Wakemode.setOnClickListener(WakeModeListener);
+        Buzzer.setOnClickListener(BuzzerListen);
+        Temperature.setOnClickListener(TemperatureListener);
 
-            UpdateLEDs(savedInstanceState.getByte("led"));
-            LastMove.setText(savedInstanceState.getCharSequence("lastmove"));
-        }catch(Exception e){
-            Log.d(TAG, "unable to restore states: ", e);
-        }
-    }*/
-
-
+        Timer.setOnClickListener(TimerListener);;
+        LED1.setOnClickListener(LED1Listener);
+        LED2.setOnClickListener(LED2Listener);
+        LED3.setOnClickListener(LED3Listener);
+        LED4.setOnClickListener(LED4Listener);
+        LED5.setOnClickListener(LED5Listener);
+        LED6.setOnClickListener(LED6Listener);
+    }
 
     public View.OnClickListener WakeModeListener = new View.OnClickListener(){
         public void onClick(View v) {
@@ -190,126 +160,119 @@ public class TabFragment1 extends Fragment {
             MQTTService.PublishMsg("c/0", SendBuf);
         }
     };
+    public static void UpdateView(byte values[]){
+        try {
+            String TempTime = printtwodigits(values[1]) + ":" + printtwodigits(values[2]) + ":" + printtwodigits(values[3]);
+            TIME.setText(TempTime);
 
-    //update the time indicator of the fragment
-    public static void updateTime (byte hours, byte minutes, byte seconds){
-        String TempTime = printtwodigits(hours) + ":" + printtwodigits(minutes) + ":" + printtwodigits(seconds);
-        TIME.setText(TempTime);
-    }
-    //update the date indicator of the fragment
-    public static void updateDate (byte day, byte month, byte year){
-        String TempDate = printtwodigits(day) + "/" + printtwodigits(month) + "/20" + printtwodigits(year);
-        DATE.setText(TempDate);
-    }
+            String TempDate = printtwodigits(values[4]) + "/" + printtwodigits(values[5]) + "/20" + printtwodigits(values[6]);
+            DATE.setText(TempDate);
 
-    //update the temperature indicator on the fragment
-    public static void updateTemp(byte temperature1, byte temperature2){
-        String TempTemperature = printtwodigits(temperature1) + "." + printtwodigits(temperature2)
-                + "°C";
-        TEMPERATURE.setText(TempTemperature);
-    }
+            String TempTemperature = printtwodigits(values[7]) + "." + printtwodigits(values[8])
+                    + "°C";
+            TEMPERATURE.setText(TempTemperature);
+            byte Indicator = values[9];
+            if ((Indicator & 1) == 1 && DynamicVariables.WINDOW1 == 0) {
+                DynamicVariables.WINDOW1 = 1;
+                WINDOW1.setImageResource(R.drawable.windowopen);
+            } else if((Indicator & 1) == 0 && DynamicVariables.WINDOW1 == 1){
+                DynamicVariables.WINDOW1 = 0;
+                WINDOW1.setImageResource(R.drawable.windowdefault);
+            }
+            //window2
+            if ((Indicator & 2) == 2 && DynamicVariables.WINDOW2 == 0) {
+                DynamicVariables.WINDOW2 = 1;
+                WINDOW2.setImageResource(R.drawable.windowopen);
+            } else if((Indicator & 2) == 0 && DynamicVariables.WINDOW2 == 1){
+                DynamicVariables.WINDOW2 = 0;
+                WINDOW2.setImageResource(R.drawable.windowopen);
+            }
+            //door
+            if ((Indicator & 4) == 4 && DynamicVariables.DOOR == 0) {
+                DynamicVariables.DOOR = 1;
+                DOOR.setImageResource(R.drawable.dooropen);
+            } else if((Indicator & 4) == 4 && DynamicVariables.DOOR == 1){
+                DynamicVariables.DOOR = 0;
+                DOOR.setImageResource(R.drawable.doordefault);
+            }
+            //settings
+            //wakemode set
+            if ((Indicator & 8) == 8 && DynamicVariables.WAKEMODE == 0) {
+                DynamicVariables.WAKEMODE = 1;
+                Wakemode.setImageResource(R.drawable.sunpressed);
+                MainActivity.ChangeBackground((byte) 1);
+            } else if((Indicator & 8) == 0 && DynamicVariables.WAKEMODE == 1){
+                DynamicVariables.WAKEMODE = 0;
+                Wakemode.setImageResource(R.drawable.sundefault);
+                MainActivity.ChangeBackground((byte) 0);
+            }
+            //buzzer set
+            if ((Indicator & 16) == 16 && DynamicVariables.BUZZERMODE == 0) {
+                DynamicVariables.BUZZERMODE = 1;
+                Buzzer.setImageResource(R.drawable.buzzerpressed);
+            } else if((Indicator & 16) == 0 && DynamicVariables.BUZZERMODE == 1){
+                DynamicVariables.BUZZERMODE = 0;
+                Buzzer.setImageResource(R.drawable.buzzerdefault);
+            }
+            //temperature set
+            if ((Indicator & 32) == 32 && DynamicVariables.TEMPERATURECONTROL == 0) {
+                DynamicVariables.TEMPERATURECONTROL = 1;
+                Temperature.setImageResource(R.drawable.temperaturepressed);
+            } else if((Indicator & 32) == 0 && DynamicVariables.TEMPERATURECONTROL == 1) {
+                DynamicVariables.TEMPERATURECONTROL = 0;
+                Temperature.setImageResource(R.drawable.temperaturedefault);
+            }
+            //timer set
+            if ((Indicator & 64) == 64 && DynamicVariables.TIMERCONTROL == 0) {
+                DynamicVariables.TIMERCONTROL = 1;
+                Timer.setImageResource(R.drawable.timerpressed);
+            } else if((Indicator & 64) == 0 && DynamicVariables.TIMERCONTROL == 1) {
+                DynamicVariables.TIMERCONTROL = 0;
+                Timer.setImageResource(R.drawable.timerdefault);
+            }
+            byte LEDS = values[10];
+            if((DynamicVariables.LED & 32) == 0 && (LEDS & 32) == 32){
+                LED1.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 32) == 32 && (LEDS & 32) == 0){
+                LED1.setImageResource(R.drawable.leddefault);
+            }
+            if((DynamicVariables.LED & 16) == 0 && (LEDS & 16) == 16){
+                LED2.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 16) == 16 && (LEDS & 16) == 0){
+                LED2.setImageResource(R.drawable.leddefault);
+            }
+            if((DynamicVariables.LED & 8) == 0 && (LEDS & 8) == 8){
+                LED3.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 8) == 8 && (LEDS & 8) == 0){
+                LED3.setImageResource(R.drawable.leddefault);
+            }
+            if((DynamicVariables.LED & 4) == 0 && (LEDS & 4) == 4){
+                LED4.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 4) == 4 && (LEDS & 4) == 0){
+                LED4.setImageResource(R.drawable.leddefault);
+            }
+            if((DynamicVariables.LED & 2) == 0 && (LEDS & 2) == 2) {
+                LED5.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 2) == 2 && (LEDS & 2) == 0){
+                LED5.setImageResource(R.drawable.leddefault);
+            }
+            if((DynamicVariables.LED & 1) == 0 && (LEDS & 1) == 1){
+                LED6.setImageResource(R.drawable.ledon);
+            }else if((DynamicVariables.LED & 1) == 1 && (LEDS & 1) == 0){
+                LED6.setImageResource(R.drawable.leddefault);
+            }
+            DynamicVariables.LED = LEDS;
 
-    //set settings indicators
-    public static void updateSettingsandIndicators(byte Indicator){
-        if ((Indicator & 1) == 1 && DynamicVariables.WINDOW1 == 0) {
-            DynamicVariables.WINDOW1 = 1;
-            WINDOW1.setImageResource(R.drawable.windowopen);
-        } else if((Indicator & 1) == 0 && DynamicVariables.WINDOW1 == 1){
-            DynamicVariables.WINDOW1 = 0;
-            WINDOW1.setImageResource(R.drawable.windowdefault);
-        }
-        //window2
-        if ((Indicator & 2) == 2 && DynamicVariables.WINDOW2 == 0) {
-            DynamicVariables.WINDOW2 = 1;
-            WINDOW2.setImageResource(R.drawable.windowopen);
-        } else if((Indicator & 2) == 0 && DynamicVariables.WINDOW2 == 1){
-            DynamicVariables.WINDOW2 = 0;
-            WINDOW2.setImageResource(R.drawable.windowopen);
-        }
-        //door
-        if ((Indicator & 4) == 4 && DynamicVariables.DOOR == 0) {
-            DynamicVariables.DOOR = 1;
-            DOOR.setImageResource(R.drawable.dooropen);
-        } else if((Indicator & 4) == 4 && DynamicVariables.DOOR == 1){
-            DynamicVariables.DOOR = 0;
-            DOOR.setImageResource(R.drawable.doordefault);
-        }
-        //settings
-        //wakemode set
-        if ((Indicator & 8) == 8 && DynamicVariables.WAKEMODE == 0) {
-            DynamicVariables.WAKEMODE = 1;
-            Wakemode.setImageResource(R.drawable.sunpressed);
-            MainActivity.ChangeBackground((byte) 1);
-        } else if((Indicator & 8) == 0 && DynamicVariables.WAKEMODE == 1){
-            DynamicVariables.WAKEMODE = 0;
-            Wakemode.setImageResource(R.drawable.sundefault);
-            MainActivity.ChangeBackground((byte) 0);
-        }
-        //buzzer set
-        if ((Indicator & 16) == 16 && DynamicVariables.BUZZERMODE == 0) {
-            DynamicVariables.BUZZERMODE = 1;
-            Buzzer.setImageResource(R.drawable.buzzerpressed);
-        } else if((Indicator & 16) == 0 && DynamicVariables.BUZZERMODE == 1){
-            DynamicVariables.BUZZERMODE = 0;
-            Buzzer.setImageResource(R.drawable.buzzerdefault);
-        }
-        //temperature set
-        if ((Indicator & 32) == 32 && DynamicVariables.TEMPERATURECONTROL == 0) {
-            DynamicVariables.TEMPERATURECONTROL = 1;
-            Temperature.setImageResource(R.drawable.temperaturepressed);
-        } else if((Indicator & 32) == 0 && DynamicVariables.TEMPERATURECONTROL == 1) {
-            DynamicVariables.TEMPERATURECONTROL = 0;
-            Temperature.setImageResource(R.drawable.temperaturedefault);
-        }
-        //timer set
-        if ((Indicator & 64) == 64 && DynamicVariables.TIMERCONTROL == 0) {
-            DynamicVariables.TIMERCONTROL = 1;
-            Timer.setImageResource(R.drawable.timerpressed);
-        } else if((Indicator & 64) == 0 && DynamicVariables.TIMERCONTROL == 1) {
-            DynamicVariables.TIMERCONTROL = 0;
-            Timer.setImageResource(R.drawable.timerdefault);
-        }
-    }
+            String LastMovement = "Last Movement: " + printtwodigits(values[13]) + ":"
+                    + printtwodigits(values[12]) + ":" + printtwodigits(values[11])
+                    + " on " + printtwodigits(values[14]) + "/" + printtwodigits(values[15]);
+            LastMove.setText(LastMovement);
 
-    public static void UpdateLEDs(byte LEDS){
-        if((DynamicVariables.LED & 32) == 0 && (LEDS & 32) == 32){
-            LED1.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 32) == 32 && (LEDS & 32) == 0){
-            LED1.setImageResource(R.drawable.leddefault);
+            String Reconnected = "Device has Reconnected " + Integer.toString((values[19]&0xFF)) + " times";
+            Reconnects.setText(Reconnected);
+        }catch(Exception e){
+            //do nothing
         }
-        if((DynamicVariables.LED & 16) == 0 && (LEDS & 16) == 16){
-            LED2.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 16) == 16 && (LEDS & 16) == 0){
-            LED2.setImageResource(R.drawable.leddefault);
-        }
-        if((DynamicVariables.LED & 8) == 0 && (LEDS & 8) == 8){
-            LED3.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 8) == 8 && (LEDS & 8) == 0){
-            LED3.setImageResource(R.drawable.leddefault);
-        }
-        if((DynamicVariables.LED & 4) == 0 && (LEDS & 4) == 4){
-            LED4.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 4) == 4 && (LEDS & 4) == 0){
-            LED4.setImageResource(R.drawable.leddefault);
-        }
-        if((DynamicVariables.LED & 2) == 0 && (LEDS & 2) == 2) {
-            LED5.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 2) == 2 && (LEDS & 2) == 0){
-            LED5.setImageResource(R.drawable.leddefault);
-        }
-        if((DynamicVariables.LED & 1) == 0 && (LEDS & 1) == 1){
-            LED6.setImageResource(R.drawable.ledon);
-        }else if((DynamicVariables.LED & 1) == 1 && (LEDS & 1) == 0){
-            LED6.setImageResource(R.drawable.leddefault);
-        }
-        DynamicVariables.LED = LEDS;
-    }
-
-    public static void UpdateMovement(byte lastsecond, byte lastminute, byte lasthour, byte lastday, byte lastmonth){
-        String LastMovement = "Last Movement: " + printtwodigits(lasthour) + ":"
-                + printtwodigits(lastminute) + ":" + printtwodigits(lastsecond)
-                + " on " + printtwodigits(lastday) + "/" + printtwodigits(lastmonth);
-        LastMove.setText(LastMovement);
     }
 
     static String printtwodigits(byte digit){
@@ -317,7 +280,7 @@ public class TabFragment1 extends Fragment {
         if(digit < 10){
             output += "0";
         }
-        output += Integer.toString(digit);
+        output += Byte.toString(digit);
         return output;
     }
 }

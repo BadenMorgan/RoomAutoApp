@@ -172,8 +172,20 @@
         android:text="Last Movement: 88:88:88 on 13/12"
         android:textColor="@color/DarkGrey"
         android:editable = "true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/LED1"
+        />
+
+    <TextView
+        android:id="@+id/Reconnects"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="Device has Reconnected x times"
+        android:textColor="@color/DarkGrey"
+        android:editable = "true"
+        android:layout_below="@id/LastMove"
         />
 
 </RelativeLayout>
