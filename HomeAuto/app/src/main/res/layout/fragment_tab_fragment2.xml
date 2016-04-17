@@ -99,16 +99,15 @@
         android:layout_toEndOf="@+id/TripVal"
         />
 
-    <EditText android:id="@+id/CurrentVal"
+    <TextView android:id="@+id/CurrentVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:width="300px"
+        android:layout_marginTop="10dp"
+        android:textSize="19sp"
         android:layout_below="@id/TripValHeading"
         android:hint = "0"
-        android:layout_above="@+id/TimedOutput"
-        android:layout_toEndOf="@+id/TripVal"/>
-
-
+        android:layout_toEndOf="@+id/TripVal"
+        android:layout_alignBottom="@id/TripVal"/>
 
     <TextView
         android:id="@+id/TimedOutput"
