@@ -84,6 +84,7 @@ public class TabFragment1 extends Fragment {
         DynamicVariables.WAKEMODE = 0;
         DynamicVariables.WINDOW1 = 0;
         DynamicVariables.WINDOW2 = 0;
+        DynamicVariables.LED = 0;
     }
 
     void setupbutton(){
@@ -191,7 +192,7 @@ public class TabFragment1 extends Fragment {
             if ((Indicator & 4) == 4 && DynamicVariables.DOOR == 0) {
                 DynamicVariables.DOOR = 1;
                 DOOR.setImageResource(R.drawable.dooropen);
-            } else if((Indicator & 4) == 4 && DynamicVariables.DOOR == 1){
+            } else if((Indicator & 4) == 0 && DynamicVariables.DOOR == 1){
                 DynamicVariables.DOOR = 0;
                 DOOR.setImageResource(R.drawable.doordefault);
             }

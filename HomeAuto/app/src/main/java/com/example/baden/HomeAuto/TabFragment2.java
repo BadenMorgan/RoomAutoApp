@@ -2,6 +2,7 @@ package com.example.baden.HomeAuto;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ public class TabFragment2 extends Fragment {
     public static ImageButton Count;
     public static Button RequestUpdate;
     public static EditText countdown,UpTemp,LoTemp,TripVal,HourON,MinuteON,HourOFF,MinuteOFF,WHour,WMinute;
-    public static TextView CurrentVal;
+    public static TextView CurrentVal,CurrentValCount;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,7 @@ public class TabFragment2 extends Fragment {
         LoTemp = (EditText)view.findViewById(R.id.LoTemp);
         TripVal = (EditText)view.findViewById(R.id.TripVal);
         CurrentVal = (TextView)view.findViewById(R.id.CurrentVal);
+        CurrentValCount = (TextView) view.findViewById(R.id.CurrentCountVal);
         HourON = (EditText)view.findViewById(R.id.HourON);
         MinuteON = (EditText)view.findViewById(R.id.MinuteON);
         HourOFF = (EditText)view.findViewById(R.id.HourOFF);
@@ -75,8 +77,8 @@ public class TabFragment2 extends Fragment {
                     int checkint1 = Integer.parseInt(newWHour);
                     int checkint2 = Integer.parseInt(newWMinute);
                     if(checkint1 < 24 && checkint2 < 60 && checkint1 > 0 && checkint2 > 0) {
-                        byte newWHourByte = (byte) (checkint1);
-                        byte newWminuteByte = (byte) (checkint2);
+                        byte newWHourByte = (byte) (checkint1 & 0xFF);
+                        byte newWminuteByte = (byte) (checkint2 & 0xFF);
                         byte SendBuf[] = {7, newWHourByte,newWminuteByte};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
@@ -88,6 +90,8 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Fill in atleast one field");
             }
+            WHour.setText("");
+            WMinute.setText("");
         }
     };
 
@@ -117,10 +121,10 @@ public class TabFragment2 extends Fragment {
                     int checkint3 = Integer.parseInt(newHourOff);
                     int checkint4 = Integer.parseInt(newMinuteOff);
                     if(checkint1 < 24 && checkint2 < 60 && checkint3 < 24 && checkint4 < 60 && checkint1 > 0 && checkint2 > 0 && checkint3 > 0 && checkint4 > 0) {
-                        byte newHourOnByte = (byte) (checkint1);
-                        byte newMinuteOnByte = (byte) (checkint2);
-                        byte newHourOffByte = (byte) (checkint3);
-                        byte newMinuteOffByte = (byte) (checkint4);
+                        byte newHourOnByte = (byte) (checkint1 & 0xFF);
+                        byte newMinuteOnByte = (byte) (checkint2 & 0xFF);
+                        byte newHourOffByte = (byte) (checkint3 & 0xFF);
+                        byte newMinuteOffByte = (byte) (checkint4 & 0xFF);
                         byte SendBuf[] = {6, newHourOnByte, newMinuteOnByte, newHourOffByte, newMinuteOffByte};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
@@ -132,21 +136,25 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Fill in atleast one field");
             }
+            HourON.setText("");
+            MinuteON.setText("");
+            HourOFF.setText("");
+            MinuteOFF.setText("");
         }
     };
 
     public View.OnClickListener LightingLimitUpdateListener = new View.OnClickListener(){
         public void onClick(View v) {
-            String warning = "Enter a numbers less than 256";
+            String warning = "Enter a numbers less than 511";
             String newLimt = TripVal.getText().toString();
             if(newLimt.matches("")){
                 newLimt = TripVal.getHint().toString();
             }
             if(newLimt != TripVal.getHint().toString()) {
                 try {
-                    int checkint = Integer.parseInt(newLimt);
-                    if(checkint < 256 && checkint > 0) {
-                        byte newTripValByte = (byte) (checkint);
+                    int checkint = Integer.parseInt(newLimt)/2;
+                    if(checkint < 511 && checkint > 0) {
+                        byte newTripValByte = (byte) (checkint & 0xFF);
                         byte SendBuf[] = {5, newTripValByte};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
@@ -158,6 +166,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Enter new value");
             }
+            TripVal.setText("");
         }
     };
 
@@ -177,8 +186,8 @@ public class TabFragment2 extends Fragment {
                     int checkint1 = Integer.parseInt(newUpTemp);
                     int checkint2 = Integer.parseInt(newLoTemp);
                     if(checkint1 < 256 && checkint2 < 256 && checkint1 > 0 && checkint2 > 0) {
-                        byte newUpTempByte = (byte) (checkint1);
-                        byte newLoTempByte = (byte) (checkint2);
+                        byte newUpTempByte = (byte) (checkint1 & 0xFF);
+                        byte newLoTempByte = (byte) (checkint2 & 0xFF);
                         byte SendBuf[] = {4, newUpTempByte,newLoTempByte};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
@@ -190,6 +199,8 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Fill in atleast one field");
             }
+            UpTemp.setText("");
+            LoTemp.setText("");
         }
     };
 
@@ -204,7 +215,7 @@ public class TabFragment2 extends Fragment {
                 try {
                     int checkint = Integer.parseInt(newCount);
                     if(checkint < 256 && checkint > 0) {
-                        byte newCountByte = (byte) (checkint);
+                        byte newCountByte = (byte)(checkint & 0xFF);
                         byte SendBuf[] = {3, newCountByte};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
@@ -216,6 +227,7 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Enter new value");
             }
+            countdown.setText("");
         }
     };
 
@@ -233,13 +245,14 @@ public class TabFragment2 extends Fragment {
     public static void UpdatHints(byte[] values){
         try {
             countdown = (EditText) view.findViewById(R.id.countdown);
-            countdown.setHint(Integer.toString(unsignedToBytes(values[1])));
+            countdown.setHint(Integer.toString(values[1]));
             UpTemp = (EditText) view.findViewById(R.id.UpTemp);
             UpTemp.setHint(Integer.toString(unsignedToBytes(values[2])));
             LoTemp = (EditText) view.findViewById(R.id.LoTemp);
             LoTemp.setHint(Integer.toString(unsignedToBytes(values[3])));
             TripVal = (EditText) view.findViewById(R.id.TripVal);
-            TripVal.setHint(Integer.toString(unsignedToBytes(values[4])));
+            String tripval = Integer.toString(unsignedToBytes(values[4]) * 2);
+            TripVal.setHint(tripval);
             HourON = (EditText) view.findViewById(R.id.HourON);
             HourON.setHint(Integer.toString(unsignedToBytes(values[5])));
             MinuteON = (EditText) view.findViewById(R.id.MinuteON);
@@ -256,9 +269,11 @@ public class TabFragment2 extends Fragment {
             //do nothing
         }
     };
-    public static void UpdateLghtVal(int lightval){
+    public static void UpdateLghtVal(int lightval, byte currentlight){
         try {
             CurrentVal.setText(Integer.toString(lightval));
+            CurrentValCount.setText(Integer.toString(unsignedToBytes(currentlight)));
+            //Log.v("tab2", "Current byte: " + currentlight + ", Current convert: " + unsignedToBytes(currentlight));
         }catch(Exception e){
 
         }

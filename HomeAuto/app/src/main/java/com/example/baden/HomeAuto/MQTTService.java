@@ -157,6 +157,7 @@ public class MQTTService extends Service {
         try {
             mqttClient = new MqttClient("tcp://m21.cloudmqtt.com:11502", "android1", new MemoryPersistence());
             mqttClient.connect(options);
+
             Toast.makeText(getApplicationContext(), "Connected to broker!", Toast.LENGTH_LONG).show();
             mqttClient.setCallback(new MqttEventCallback());
             mqttClient.subscribe("d/0", 0);
@@ -231,14 +232,14 @@ public class MQTTService extends Service {
                     //Toast.makeText(getApplicationContext(), "MQTT Message:\n" + new String(msg.getPayload()), Toast.LENGTH_SHORT).show();
                     //time
                     byte received[] = msg.getPayload();
-
-                    if ((received.length == 20) && (received[0] == 1)) {
+                    //Log.v(TAG, "payload len: " + received.length);
+                    if ((received.length == 21) && (received[0] == 1)) {
                         TabFragment1.UpdateView(received);
                         if (received[16] == 1) {
                             Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
                         }
                         int lightval = (received[17]<<8)&0xFF00 | (received[18])&0xFF;
-                        TabFragment2.UpdateLghtVal(lightval);
+                        TabFragment2.UpdateLghtVal(lightval,received[20]);
                     }
                     if ((received.length == 11) && (received[0] == 2)) {
                         TabFragment2.UpdatHints(received);

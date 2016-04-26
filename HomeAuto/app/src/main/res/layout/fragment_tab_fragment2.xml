@@ -23,6 +23,28 @@
         />
 
     <TextView
+        android:id="@+id/CurrentCountHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:text="Time Left:"
+        android:textColor="@color/DarkGrey"
+
+        android:layout_toEndOf="@+id/TripVal"
+        />
+
+    <TextView android:id="@+id/CurrentCountVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="19sp"
+        android:layout_below="@id/CurrentCountHeading"
+        android:hint = "0"
+        android:layout_toEndOf="@+id/TripVal"
+        android:layout_alignBottom="@id/TripVal"/>
+
+    <TextView
         android:id="@+id/TemperatureHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
