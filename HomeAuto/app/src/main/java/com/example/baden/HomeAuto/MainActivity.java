@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Home"));
         tabLayout.addTab(tabLayout.newTab().setText("Settings"));
+        tabLayout.addTab(tabLayout.newTab().setText("Kettle"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //PersistantNotification();

@@ -20,6 +20,10 @@ public class DynamicVariables {
     public static byte DOOR = 0;
     //LED variables
     public static byte LED = 0;
+    //keep status
+    public static byte KEEP = 0;
+    //relay state
+    public static byte RELAY = 0;
 
 
 

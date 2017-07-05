@@ -161,6 +161,7 @@ public class MQTTService extends Service {
             Toast.makeText(getApplicationContext(), "Connected to broker!", Toast.LENGTH_LONG).show();
             mqttClient.setCallback(new MqttEventCallback());
             mqttClient.subscribe("d/0", 0);
+            mqttClient.subscribe("d/kettle0", 0);
             byte SendBuf[] ={2};
             MQTTService.PublishMsg("c/0", SendBuf);
         } catch (MqttSecurityException e) {
@@ -229,21 +230,28 @@ public class MQTTService extends Service {
         		        launchA.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         		    }*/
                     /*startActivity(launchA);*/
-                    //Toast.makeText(getApplicationContext(), "MQTT Message:\n" + new String(msg.getPayload()), Toast.LENGTH_SHORT).show();
+
                     //time
                     byte received[] = msg.getPayload();
+                    //Toast.makeText(getApplicationContext(), "MQTT Message:\n" + received.length, Toast.LENGTH_SHORT).show();
                     //Log.v(TAG, "payload len: " + received.length);
                     if ((received.length == 21) && (received[0] == 1)) {
                         TabFragment1.UpdateView(received);
                         if (received[16] == 1) {
                             Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
                         }
-                        int lightval = (received[17]<<8)&0xFF00 | (received[18])&0xFF;
-                        TabFragment2.UpdateLghtVal(lightval,received[20]);
+                        int lightval = (received[17] << 8) & 0xFF00 | (received[18]) & 0xFF;
+                        TabFragment2.UpdateLghtVal(lightval, received[20]);
                     }
                     if ((received.length == 11) && (received[0] == 2)) {
                         TabFragment2.UpdatHints(received);
                         Toast.makeText(getApplicationContext(), "Updated settings", Toast.LENGTH_SHORT).show();
+                    }
+                    if ((received.length == 13) && (received[0] == 3)) {
+                        TabFragment3.UpdateView(received);
+                        if (received[1] == 1) {
+                            Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
