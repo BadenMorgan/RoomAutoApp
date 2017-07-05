@@ -13,14 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TabFragment2 extends Fragment {
+    private static final String TAG = "Frag2";
     public static View view;
     public static ImageButton WakeTime;
     public static ImageButton TimeOutput;
     public static ImageButton LightingLimit;
-    public static ImageButton TempLimits;
+//    public static ImageButton TempLimits;
+    public static ImageButton StabPointButton;
     public static ImageButton Count;
     public static Button RequestUpdate;
-    public static EditText countdown,UpTemp,LoTemp,TripVal,HourON,MinuteON,HourOFF,MinuteOFF,WHour,WMinute;
+    public static EditText countdown,StabPoint,TurboVal,TripVal,HourON,MinuteON,HourOFF,MinuteOFF,WHour,WMinute;
     public static TextView CurrentVal,CurrentValCount;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,8 +38,11 @@ public class TabFragment2 extends Fragment {
         LightingLimit = (ImageButton)view.findViewById(R.id.LightingLimitUpdate);
         LightingLimit.setOnClickListener(LightingLimitUpdateListener);
 
-        TempLimits = (ImageButton)view.findViewById(R.id.TempLimitsUpdate);
-        TempLimits.setOnClickListener(TempLimitsUpdateListener);
+//        TempLimits = (ImageButton)view.findViewById(R.id.TempLimitsUpdate);
+//        TempLimits.setOnClickListener(TempLimitsUpdateListener);
+
+        StabPointButton = (ImageButton)view.findViewById(R.id.StabPointUpdate);
+        StabPointButton.setOnClickListener(StabPointButtonListener);
 
         Count = (ImageButton)view.findViewById(R.id.CountUpdate);
         Count.setOnClickListener(CountUpdateListener);
@@ -46,8 +51,10 @@ public class TabFragment2 extends Fragment {
         RequestUpdate.setOnClickListener(RequestUpdateNow);
 
         countdown = (EditText)view.findViewById(R.id.countdown);
-        UpTemp = (EditText)view.findViewById(R.id.UpTemp);
-        LoTemp = (EditText)view.findViewById(R.id.LoTemp);
+//        UpTemp = (EditText)view.findViewById(R.id.UpTemp);
+//        LoTemp = (EditText)view.findViewById(R.id.LoTemp);
+        StabPoint = (EditText)view.findViewById(R.id.StabPoint);
+        TurboVal = (EditText)view.findViewById(R.id.TurboVal);
         TripVal = (EditText)view.findViewById(R.id.TripVal);
         CurrentVal = (TextView)view.findViewById(R.id.CurrentVal);
         CurrentValCount = (TextView) view.findViewById(R.id.CurrentCountVal);
@@ -170,25 +177,62 @@ public class TabFragment2 extends Fragment {
         }
     };
 
-    public View.OnClickListener TempLimitsUpdateListener = new View.OnClickListener(){
+//    public View.OnClickListener TempLimitsUpdateListener = new View.OnClickListener(){
+//        public void onClick(View v) {
+//            String warning = "Enter a numbers less than 256";
+//            String newUpTemp = UpTemp.getText().toString();
+//            if(newUpTemp.matches("")){
+//                newUpTemp = UpTemp.getHint().toString();
+//            }
+//            String newLoTemp = LoTemp.getText().toString();
+//            if(newLoTemp.matches("")){
+//                newLoTemp = LoTemp.getHint().toString();
+//            }
+//            if((newUpTemp != UpTemp.getHint().toString()) || (newLoTemp != LoTemp.getHint().toString())) {
+//                try {
+//                    int checkint1 = Integer.parseInt(newUpTemp);
+//                    int checkint2 = Integer.parseInt(newLoTemp);
+//                    if(checkint1 < 256 && checkint2 < 256 && checkint1 > 0 && checkint2 > 0) {
+//                        byte newUpTempByte = (byte) (checkint1 & 0xFF);
+//                        byte newLoTempByte = (byte) (checkint2 & 0xFF);
+//                        byte SendBuf[] = {4, newUpTempByte,newLoTempByte};
+//                        MQTTService.PublishMsg("c/0", SendBuf);
+//                    }else{
+//                        makeToast(warning);
+//                    }
+//                }catch(Exception e){
+//                    makeToast(warning);
+//                }
+//            } else {
+//                makeToast("Fill in atleast one field");
+//            }
+//            UpTemp.setText("");
+//            LoTemp.setText("");
+//        }
+//    };
+
+    public View.OnClickListener StabPointButtonListener = new View.OnClickListener(){
         public void onClick(View v) {
             String warning = "Enter a numbers less than 256";
-            String newUpTemp = UpTemp.getText().toString();
+            String newUpTemp = StabPoint.getText().toString();
+            String Turbo = TurboVal.getText().toString();
             if(newUpTemp.matches("")){
-                newUpTemp = UpTemp.getHint().toString();
+                newUpTemp = StabPoint.getHint().toString();
             }
-            String newLoTemp = LoTemp.getText().toString();
-            if(newLoTemp.matches("")){
-                newLoTemp = LoTemp.getHint().toString();
+            if(Turbo.matches("")){
+                Turbo = TurboVal.getHint().toString();
             }
-            if((newUpTemp != UpTemp.getHint().toString()) || (newLoTemp != LoTemp.getHint().toString())) {
+
+            if((newUpTemp != StabPoint.getHint().toString()) || (Turbo != countdown.getHint().toString())) {
                 try {
-                    int checkint1 = Integer.parseInt(newUpTemp);
-                    int checkint2 = Integer.parseInt(newLoTemp);
-                    if(checkint1 < 256 && checkint2 < 256 && checkint1 > 0 && checkint2 > 0) {
-                        byte newUpTempByte = (byte) (checkint1 & 0xFF);
-                        byte newLoTempByte = (byte) (checkint2 & 0xFF);
-                        byte SendBuf[] = {4, newUpTempByte,newLoTempByte};
+                    float checkint1 = Float.parseFloat(newUpTemp);
+                    int checkint = Integer.parseInt(Turbo);
+                    makeToast(Integer.toString(checkint));
+                    if(checkint1 < 256 && checkint1 > 0 && checkint < 256 && checkint > 0 ) {
+                        byte newTrubo = (byte)(checkint & 0xFF);
+                        int newUpTempsecondbyte = (int)(checkint1 * 100);
+                        newUpTempsecondbyte = newUpTempsecondbyte - ((byte)checkint1 * 100);
+                        byte SendBuf[] = {8, (byte)checkint1,(byte)newUpTempsecondbyte, newTrubo};
                         MQTTService.PublishMsg("c/0", SendBuf);
                     }else{
                         makeToast(warning);
@@ -199,8 +243,8 @@ public class TabFragment2 extends Fragment {
             } else {
                 makeToast("Fill in atleast one field");
             }
-            UpTemp.setText("");
-            LoTemp.setText("");
+            StabPoint.setText("");
+            TurboVal.setText("");
         }
     };
 
@@ -246,10 +290,11 @@ public class TabFragment2 extends Fragment {
         try {
             countdown = (EditText) view.findViewById(R.id.countdown);
             countdown.setHint(Integer.toString(values[1]));
-            UpTemp = (EditText) view.findViewById(R.id.UpTemp);
-            UpTemp.setHint(Integer.toString(unsignedToBytes(values[2])));
-            LoTemp = (EditText) view.findViewById(R.id.LoTemp);
-            LoTemp.setHint(Integer.toString(unsignedToBytes(values[3])));
+//            UpTemp = (EditText) view.findViewById(R.id.UpTemp);
+//            UpTemp.setHint(Integer.toString(unsignedToBytes(values[2])));
+
+//            LoTemp = (EditText) view.findViewById(R.id.LoTemp);
+//            LoTemp.setHint(Integer.toString(unsignedToBytes(values[3])));
             TripVal = (EditText) view.findViewById(R.id.TripVal);
             String tripval = Integer.toString(unsignedToBytes(values[4]) * 2);
             TripVal.setHint(tripval);
@@ -265,6 +310,11 @@ public class TabFragment2 extends Fragment {
             WHour.setHint(Integer.toString(unsignedToBytes(values[9])));
             WMinute = (EditText) view.findViewById(R.id.WMinute);
             WMinute.setHint(Integer.toString(unsignedToBytes(values[10])));
+            String SetTemp = printtwodigits(values[11]) + "." + printtwodigits(values[12]);
+            StabPoint = (EditText) view.findViewById(R.id.StabPoint);
+            StabPoint.setHint(SetTemp);
+            TurboVal = (EditText) view.findViewById(R.id.TurboVal);
+            TurboVal.setHint(Integer.toString(unsignedToBytes(values[13])));
         }catch(Exception e){
             //do nothing
         }
@@ -281,5 +331,14 @@ public class TabFragment2 extends Fragment {
 
     public static int unsignedToBytes(byte b) {
         return b & 0xFF;
+    }
+
+    static String printtwodigits(byte digit){
+        String output = "";
+        if(digit < 10){
+            output += "0";
+        }
+        output += Byte.toString(digit);
+        return output;
     }
 }

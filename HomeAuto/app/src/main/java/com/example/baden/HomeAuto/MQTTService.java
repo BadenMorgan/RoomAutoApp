@@ -233,7 +233,7 @@ public class MQTTService extends Service {
 
                     //time
                     byte received[] = msg.getPayload();
-                    //Toast.makeText(getApplicationContext(), "MQTT Message:\n" + received.length, Toast.LENGTH_SHORT).show();
+                    //
                     //Log.v(TAG, "payload len: " + received.length);
                     if ((received.length == 21) && (received[0] == 1)) {
                         TabFragment1.UpdateView(received);
@@ -242,16 +242,15 @@ public class MQTTService extends Service {
                         }
                         int lightval = (received[17] << 8) & 0xFF00 | (received[18]) & 0xFF;
                         TabFragment2.UpdateLghtVal(lightval, received[20]);
-                    }
-                    if ((received.length == 11) && (received[0] == 2)) {
                         TabFragment2.UpdatHints(received);
                         Toast.makeText(getApplicationContext(), "Updated settings", Toast.LENGTH_SHORT).show();
-                    }
-                    if ((received.length == 13) && (received[0] == 3)) {
+                    } else if ((received.length == 13) && (received[0] == 3)) {
                         TabFragment3.UpdateView(received);
                         if (received[1] == 1) {
                             Toast.makeText(getApplicationContext(), "Command received!", Toast.LENGTH_SHORT).show();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "MQTT Message:\n" + received.length, Toast.LENGTH_SHORT).show();
                     }
                 }
             });

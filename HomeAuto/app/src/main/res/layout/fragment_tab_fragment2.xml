@@ -49,48 +49,85 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:text="Temperatures for Audible Alarm"
+        android:text="Temperatures for Room stability point:"
         android:textColor="@color/DarkGrey"
         android:layout_below="@id/countdown"
         android:layout_toEndOf="@+id/CountUpdate"
         />
 
+    <!--<TextView-->
+        <!--android:id="@+id/UpTempHeading"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="15sp"-->
+        <!--android:text="Max Temperature:"-->
+        <!--android:textColor="@color/DarkGrey"-->
+        <!--android:layout_below="@id/TemperatureHeading"-->
+        <!--android:layout_toEndOf="@+id/CountUpdate"-->
+        <!--/>-->
+
+    <!--<EditText android:id="@+id/UpTemp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:width="300px"-->
+        <!--android:layout_below="@id/UpTempHeading"-->
+        <!--android:layout_toEndOf="@+id/CountUpdate"-->
+        <!--android:hint = "0"/>-->
+
     <TextView
-        android:id="@+id/UpTempHeading"
+        android:id="@+id/StabPointHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:text="Max Temperature:"
+        android:text="Stable Point::"
         android:textColor="@color/DarkGrey"
         android:layout_below="@id/TemperatureHeading"
         android:layout_toEndOf="@+id/CountUpdate"
         />
 
-    <EditText android:id="@+id/UpTemp"
+    <EditText android:id="@+id/StabPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:width="300px"
-        android:layout_below="@id/UpTempHeading"
+        android:layout_below="@id/StabPointHeading"
         android:layout_toEndOf="@+id/CountUpdate"
         android:hint = "0"/>
 
-    <TextView
-        android:id="@+id/LoTempHeading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="Min Temperature:"
-        android:textColor="@color/DarkGrey"
-        android:layout_above="@+id/UpTemp"
-        android:layout_toEndOf="@+id/UpTemp" />
+    <!--<TextView-->
+        <!--android:id="@+id/LoTempHeading"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="15sp"-->
+        <!--android:text="Min Temperature:"-->
+        <!--android:textColor="@color/DarkGrey"-->
+        <!--android:layout_above="@+id/UpTemp"-->
+        <!--android:layout_toEndOf="@+id/UpTemp" />-->
 
-    <EditText android:id="@+id/LoTemp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:width="300px"
-        android:layout_alignTop="@+id/UpTemp"
-        android:layout_toEndOf="@+id/UpTemp"
-        android:hint = "0"/>
+    <!--<EditText android:id="@+id/LoTemp"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:width="300px"-->
+        <!--android:layout_alignTop="@+id/UpTemp"-->
+        <!--android:layout_toEndOf="@+id/UpTemp"-->
+        <!--android:hint = "0"/>-->
+
+    <TextView
+    android:id="@+id/TurboHeading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="15sp"
+    android:text="Turbo Value:"
+    android:textColor="@color/DarkGrey"
+    android:layout_above="@+id/StabPoint"
+    android:layout_toEndOf="@+id/StabPoint" />
+
+    <EditText android:id="@+id/TurboVal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:width="300px"
+    android:layout_alignTop="@+id/StabPoint"
+    android:layout_toEndOf="@+id/StabPoint"
+    android:hint = "0"/>
 
     <TextView
         android:id="@+id/TripValHeading"
@@ -99,7 +136,7 @@
         android:textSize="15sp"
         android:text="Lighting limit:"
         android:textColor="@color/DarkGrey"
-        android:layout_below="@id/LoTemp"
+        android:layout_below="@id/StabPoint"
         android:layout_toEndOf="@+id/CountUpdate"
         />
     <EditText android:id="@+id/TripVal"
@@ -117,7 +154,7 @@
         android:textSize="15sp"
         android:text="Current 'Lux':"
         android:textColor="@color/DarkGrey"
-        android:layout_below="@id/LoTemp"
+        android:layout_below="@id/StabPoint"
         android:layout_toEndOf="@+id/TripVal"
         />
 
@@ -282,14 +319,14 @@
         android:layout_marginLeft="7dp"
         />
 
-    <ImageButton android:id = "@+id/TempLimitsUpdate"
+    <ImageButton android:id = "@+id/StabPointUpdate"
         android:layout_width="50dip"
         android:layout_height="50dip"
         android:src="@drawable/updatebutton"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackground"
-        android:layout_alignBottom="@+id/UpTemp"
+        android:layout_alignBottom="@+id/StabPoint"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="7dp"
         />

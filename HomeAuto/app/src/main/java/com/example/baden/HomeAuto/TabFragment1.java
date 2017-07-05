@@ -186,7 +186,7 @@ public class TabFragment1 extends Fragment {
                 WINDOW2.setImageResource(R.drawable.windowopen);
             } else if((Indicator & 2) == 0 && DynamicVariables.WINDOW2 == 1){
                 DynamicVariables.WINDOW2 = 0;
-                WINDOW2.setImageResource(R.drawable.windowopen);
+                WINDOW2.setImageResource(R.drawable.windowdefault);
             }
             //door
             if ((Indicator & 4) == 4 && DynamicVariables.DOOR == 0) {
