@@ -242,6 +242,7 @@ public class MQTTService extends Service {
                         }
                         int lightval = (received[17] << 8) & 0xFF00 | (received[18]) & 0xFF;
                         TabFragment2.UpdateLghtVal(lightval, received[20]);
+                    } else if ((received.length == 14) && (received[0] == 2)) {
                         TabFragment2.UpdatHints(received);
                         Toast.makeText(getApplicationContext(), "Updated settings", Toast.LENGTH_SHORT).show();
                     } else if ((received.length == 13) && (received[0] == 3)) {
